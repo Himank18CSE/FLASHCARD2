@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard Viewer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="light-mode">
+    <div class="theme-toggle">
+        <button id="theme-switch" aria-label="Toggle dark mode">
+            <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <svg class="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Add XP and Level Display -->
+    <div class="level-container">
+        <div class="level-info">
+            <div class="level-badge">
+                <span id="current-level">1</span>
+            </div>
+            <div class="xp-info">
+                <div class="xp-bar-container">
+                    <div class="xp-bar" id="xp-progress"></div>
+                </div>
+                <span class="xp-text">XP: <span id="current-xp">0</span> / <span id="xp-to-level">100</span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="progress-container">
+            <div class="circular-progress">
+                <svg class="progress-ring" width="120" height="120">
+                    <circle class="progress-ring-circle-bg" cx="60" cy="60" r="54" />
+                    <circle class="progress-ring-circle" cx="60" cy="60" r="54" />
+                </svg>
+                <div class="progress-text">
+                    <span id="progress-percentage">0%</span>
+                    <span class="progress-label">Known</span>
+                </div>
+            </div>
+            <div class="progress-stats">
+                <div class="stat-item">
+                    <span id="cards-known">0</span>
+                    <span class="stat-label">Cards Known</span>
+                </div>
+                <div class="stat-item">
+                    <span id="total-cards">0</span>
+                    <span class="stat-label">Total Cards</span>
+                </div>
+            </div>
+        </div>
+        <div class="flashcard">
+            <div class="card">
+                <div class="card-front">
+                    <h2>Question</h2>
+                    <p id="question-text">Click 'Next Card' to start!</p>
+                </div>
+                <div class="card-back">
+                    <h2>Answer</h2>
+                    <p id="answer-text"></p>
+                </div>
+            </div>
+        </div>
+        <div class="controls">
+            <button id="flip-btn" class="btn">Flip Card</button>
+            <button id="know-btn" class="btn success">I Know This!</button>
+            <button id="dont-know-btn" class="btn danger">Don't Know</button>
+            <button id="next-btn" class="btn">Next Card</button>
+        </div>
+        <div class="stats">
+            <p>Known: <span id="known-count">0</span></p>
+            <p>Learning: <span id="learning-count">0</span></p>
+        </div>
+        
+        <!-- Add quote container -->
+        <div id="quote-container" class="quote-container hidden">
+            <div class="quote-content">
+                <svg class="quote-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
+                    <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"></path>
+                </svg>
+                <p id="quote-text" class="quote-text"></p>
+                <p id="quote-author" class="quote-author"></p>
+            </div>
+            <button id="restart-btn" class="btn success">Start New Session</button>
+        </div>
+
+        <!-- Add Rewards Panel -->
+        <div id="rewards-panel" class="rewards-panel hidden">
+            <h2>Level Up!</h2>
+            <div class="reward-content">
+                <div class="level-up-badge">
+                    <span id="new-level">2</span>
+                </div>
+                <p>Congratulations! You've reached level <span id="level-up-text">2</span>!</p>
+                <div class="unlocked-reward" id="unlocked-reward">
+                    <h3>Unlocked Reward:</h3>
+                    <div class="reward-item">
+                        <div class="reward-icon"></div>
+                        <span class="reward-name">New Theme</span>
+                    </div>
+                </div>
+            </div>
+            <button id="claim-reward-btn" class="btn success">Claim Reward</button>
+        </div>
+
+        <!-- Add Theme Selector -->
+        <div class="theme-selector">
+            <button id="theme-selector-btn" class="btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                Themes
+            </button>
+            <div id="theme-menu" class="theme-menu hidden">
+                <div class="theme-list">
+                    <!-- Themes will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 

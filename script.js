@@ -373,6 +373,22 @@ function markAsKnown() {
         knownCount++;
         knownCountElement.textContent = knownCount;
         updateProgress();
+        
+        // Increment streak and calculate XP
+        currentStreak++;
+        let xpAmount = xpSystem.baseXP + xpSystem.bonusXP;
+        
+        // Apply streak multiplier if applicable
+        for (const [streak, multiplier] of Object.entries(xpSystem.streakMultiplier)) {
+            if (currentStreak >= parseInt(streak)) {
+                xpAmount *= multiplier;
+                break;
+            }
+        }
+        
+        // Add XP with streak bonus
+        addXP(Math.floor(xpAmount));
+        playSound('success');
     }
 }
 
@@ -380,6 +396,11 @@ function markAsLearning() {
     if (currentCardIndex >= 0) {
         learningCount++;
         learningCountElement.textContent = learningCount;
+        
+        // Reset streak and add base XP
+        currentStreak = 0;
+        addXP(xpSystem.baseXP);
+        playSound('error');
     }
 }
 
@@ -676,6 +697,7 @@ function resetSession() {
     knownCount = 0;
     learningCount = 0;
     currentCardIndex = -1;
+    currentStreak = 0;
     knownCountElement.textContent = '0';
     learningCountElement.textContent = '0';
     quoteContainer.classList.add('hidden');
